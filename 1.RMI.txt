@@ -1,0 +1,149 @@
+Client.java
+
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.Scanner;
+
+public class Client implements Runnable {
+    private Service service;
+
+    public Client(Service service) {
+        this.service = service;
+    }
+
+    public void run() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.print("Enter message: ");
+            String message = scanner.nextLine();
+            try {
+                service.receiveMessage(message);
+            } catch (RemoteException e) {
+                System.out.println("Client exception: " + e.toString());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            Registry registry = LocateRegistry.getRegistry(1099);
+            Service service = (Service) Naming.lookup("rmi://localhost/Service");
+            Client client = new Client(service);
+            Thread thread = new Thread(client);
+            thread.start();
+        } catch (Exception e) {
+            System.out.println("Client exception: " + e.toString());
+            e.printStackTrace();
+        }
+    }
+}
+
+
+
+
+Server.java
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+
+public class Server implements Service {
+    private ArrayList<String> messages = new ArrayList<>();
+
+    public Server() throws RemoteException {
+        UnicastRemoteObject.exportObject(this, 0);
+    }
+
+    public void receiveMessage(String message) throws RemoteException {
+        System.out.println("Received message: " + message);
+        messages.add(message);
+    }
+
+    public static void main(String[] args) {
+        try {
+            Server server = new Server();
+            Registry registry = LocateRegistry.createRegistry(1099);
+            Naming.rebind("rmi://localhost/Service", server);
+            System.out.println("Server ready");
+        } catch (Exception e) {
+            System.out.println("Server exception: " + e.toString());
+            e.printStackTrace();
+        }
+    }
+}
+
+interface Service extends java.rmi.Remote {
+    void receiveMessage(String message) throws RemoteException;
+}
+
+
+
+
+
+
+//steps 
+1. open in terminal and run command javac Client.py 
+2. Now run java Client 
+3. Open new terminal and run command javac Server.py 
+4. Now run java Server 
+
+
+
+
+
+
+
+
+
+
+//explaination 
+for client.java
+
+
+The `Client` class represents a Java RMI client. It prompts the user for a message, sends it to a remote server using the `Service` object, and handles any exceptions that may occur during the process.
+
+In the `main` method, the client performs the following steps:
+1. It obtains a reference to the RMI registry.
+2. It looks up the remote `Service` object by its name.
+3. It creates an instance of the `Client` class and starts it in a separate thread.
+
+In the `run` method:
+1. It prompts the user for a message.
+2. It sends the message to the remote server using the `receiveMessage` method of the `Service` object.
+3. It handles any remote exceptions that may occur.
+
+Overall, the client connects to the remote server, accepts user input, and sends the input to the server using RMI.
+
+
+
+for server.java
+
+
+
+
+
+The `Server` class represents a Java RMI server. It receives messages from clients, stores them in an `ArrayList`, and provides a method for clients to send messages to the server.
+
+In the `Server` class:
+- The `messages` variable is an `ArrayList` that holds the received messages.
+- The constructor of the `Server` class exports the object as a remote object.
+- The `receiveMessage` method receives a message, prints it, and adds it to the `messages` list.
+
+In the `main` method:
+- An instance of the `Server` class is created.
+- The RMI registry is created on the default port 1099.
+- The server object is bound to a specific name in the registry.
+- A "Server ready" message is printed to indicate that the server is ready to receive client requests.
+
+Overall, the server sets up an RMI registry, creates an instance of the server object, binds it to a specific name, and waits for client requests. When a client invokes the `receiveMessage` method, the server prints the message and stores it in the `messages` list.
+
+
+
+
+
+
