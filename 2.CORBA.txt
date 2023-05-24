@@ -180,3 +180,82 @@ The code defines a module named "ReverseModule" with an interface named "Reverse
 
 
 for ReverseClient.java
+
+The code is a Java client application that interacts with a remote server implementing the "Reverse" interface defined in the "ReverseModule" module.
+
+In summary, the client performs the following tasks:
+
+1. Imports the required packages and classes.
+
+2. Defines a class named "ReverseClient."
+
+3. In the main method, it initializes the CORBA ORB (Object Request Broker) and obtains a reference to the Naming Service, which is used to locate objects by name.
+
+4. It looks up the object named "Reverse" in the Naming Service using the narrow method to obtain a reference to the remote object implementing the "Reverse" interface.
+
+5. Prompts the user to enter a string.
+
+6. Calls the `reverse_string` method on the remote object, passing the user's input string as a parameter.
+
+7. Displays the reversed string returned by the remote object.
+
+8. Handles any exceptions that may occur during the execution.
+
+In essence, this Java client application connects to a remote server, sends a string to be reversed, and displays the reversed string returned by the server.
+
+
+
+
+for reversempl.java
+The code is a Java class named "ReverseImpl.java" that implements the functionality of the "reverse_string" method defined in the "Reverse" interface.
+
+In summary, the class performs the following tasks:
+
+1. Defines a class named "ReverseImpl" that extends the generated "ReversePOA" class.
+
+2. Implements the "reverse_string" method, which takes a string as input.
+
+3. Creates a StringBuffer object from the input string, reverses it using the reverse() method, and returns the reversed string with a prefixed message.
+
+4. Includes a constructor that prints a message when a Reverse object is created.
+
+In essence, this Java class provides the server-side implementation of the "reverse_string" operation, which takes a string as input, reverses it, and returns the reversed string with a prefixed message.
+
+
+
+
+ReverseServer.java
+
+
+The code is a Java server application that provides the implementation for the "Reverse" interface and registers it with the Naming Service.
+
+In summary, the server performs the following tasks:
+
+1. Imports the required packages and classes.
+
+2. Defines a class named "ReverseServer."
+
+3. In the main method, it initializes the CORBA ORB (Object Request Broker).
+
+4. Initializes the Portable Object Adapter (POA) and activates the POA manager.
+
+5. Creates an instance of the ReverseImpl class, which implements the functionality of the "Reverse" interface.
+
+6. Converts the ReverseImpl object to a CORBA object reference using the root POA's servant_to_reference method.
+
+7. Obtains the Naming Service object reference using the ORB's resolve_initial_references method.
+
+8. Narrows the Naming Service object reference to the NamingContextExt type.
+
+9. Binds the Reverse object reference to a name in the Naming Service.
+
+10. Prints a message indicating that the Reverse Server is running and waiting for client invocations.
+
+11. Starts the ORB, which makes the server listen for client requests.
+
+In essence, this Java server application registers the implementation of the "Reverse" interface with the Naming Service and listens for client invocations on the registered object.
+
+
+
+
+

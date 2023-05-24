@@ -161,3 +161,52 @@ int main(int argc, char *argv[]){
 steps 
 1: run the command "mpicc arr_sum.c -o mpi_sum"
 2: run the command "mpirun -np 4 ./mpi_sum"
+
+
+
+
+
+//explaination for arr_sum_mpi.c
+
+
+
+The code demonstrates parallel computation using the Message Passing Interface (MPI) library to calculate the sum of elements in an array. It utilizes multiple processes to perform the computation.
+
+- The array size is defined as 15 using `#define arr_size 15`.
+- The program initializes the MPI environment and retrieves the rank and size of the current process using `MPI_Init`, `MPI_Comm_rank`, and `MPI_Comm_size`.
+- If the process is rank 0, it divides the array into chunks and distributes them to other processes using `MPI_Send`.
+- Rank 0 also calculates the local sum for its own chunk of the array and receives local sums from other processes using `MPI_Recv`.
+- Finally, it calculates the global sum by adding up the local sums and outputs the result.
+- For processes other than rank 0, they receive their respective array chunks using `MPI_Recv`.
+- Each process calculates the local sum for its chunk and sends it back to rank 0 using `MPI_Send`.
+
+The code demonstrates how to distribute work among multiple processes and perform parallel computations using MPI, specifically to compute the sum of an array.
+
+
+
+
+explaination for arr_sum.c
+
+The code demonstrates parallel computation using MPI to calculate the sum of elements in an array. Here's a summary:
+
+- The code initializes the MPI environment and retrieves the rank and size of the current process using `MPI_Init`, `MPI_Comm_rank`, and `MPI_Comm_size`.
+
+- An array of size `ARRAY_SIZE` is declared.
+
+- If the process is rank 0, it populates the array with values.
+
+- The array is scattered to all processes using `MPI_Scatter`.
+
+- Each process calculates the sum of its local elements.
+
+- The local sums of each process are displayed.
+
+- The local sums are reduced to compute the final sum on the root process using `MPI_Reduce` with `MPI_SUM` operation.
+
+- The root process prints the final sum.
+
+- The MPI environment is finalized using `MPI_Finalize`.
+
+This code showcases the usage of MPI for parallel computation by distributing work across processes and aggregating results.
+
+

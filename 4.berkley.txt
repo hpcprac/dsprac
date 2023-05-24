@@ -246,3 +246,51 @@ steps
 1.run the command "python3 client.py"
 2. run the command "python3 server.py"
 
+
+
+
+//explaintation
+
+for client.py
+
+
+The code is a Python program that simulates a client process for time synchronization with a server. Here's a summary:
+
+- The program defines two functions: `startSendingTime` and `startReceivingTime`, which are used as thread functions for sending and receiving time data, respectively.
+
+- The `startSendingTime` function continuously sends the current time at the client side to the server at regular intervals.
+
+- The `startReceivingTime` function continuously receives synchronized time from the server and displays it.
+
+- The `initiateSlaveClient` function sets up a client socket and connects it to the clock server.
+
+- In the `initiateSlaveClient` function, two threads are created: one for sending time to the server and another for receiving synchronized time from the server.
+
+- The program starts the client by calling `initiateSlaveClient` with a specified port number.
+
+Overall, the code simulates a client process that periodically sends its local time to a server and receives synchronized time from the server, aiming to achieve time synchronization.
+
+
+
+for server.py
+
+
+The code is a Python program that simulates a clock server for time synchronization with multiple client processes. Here's a summary:
+
+- The program defines several functions: `startReceivingClockTime`, `startConnecting`, `getAverageClockDiff`, `synchronizeAllClocks`, and `initiateClockServer`.
+
+- The `startReceivingClockTime` function runs in a nested thread and continuously receives clock time from a connected client. It updates the client data structure with the received clock time and the time difference between the client's clock and the server's clock.
+
+- The `startConnecting` function runs in the master thread and accepts connections from clients/slaves. For each client, it starts a thread to handle receiving clock time.
+
+- The `getAverageClockDiff` function calculates the average time difference between the clients' clocks and the server's clock.
+
+- The `synchronizeAllClocks` function runs in a master sync thread and performs synchronization cycles. It calculates the average clock difference and sends synchronized time to each client based on the average difference.
+
+- The `initiateClockServer` function sets up the clock server socket, starts the master thread for accepting connections, and starts the master sync thread for synchronization cycles.
+
+- The program starts the clock server by calling `initiateClockServer` with a specified port number.
+
+Overall, the code simulates a clock server that receives clock time from multiple client processes, calculates the average clock difference, and synchronizes the clients' clocks by sending them synchronized time at regular intervals.
+
+
